@@ -18,32 +18,62 @@ class ProductController extends Controller
             }else{
                 $extension = 'png';
             }
-            $fileName = Str::random(40).'.'.$extension;
-            $path = public_path().'/uploads/'.$fileName;
-            file_put_contents($path,$decoded);
-        }
-        else{
-            $fileName=null;
-        }
-        $data = $request->validate(
-            [
-                'product' => 'required',
-                'price' => 'required|integer',
-                'quantity' => 'required|integer'
-            ]
-        );
-        $data['image'] = $fileName;
-        $data['description'] = $request->description;
-        Product::create($data);
-        return response()->json(['message' => 'Product Added'],200);
+                $fileName = Str::random(40).'.'.$extension;
+                $path = public_path().'/uploads/'.$fileName;
+                file_put_contents($path,$decoded);
+            }
+            else{
+                $fileName=null;
+            }
+            $data = $request->validate(
+                [
+                    'product' => 'required',
+                    'price' => 'required|integer',
+                    'quantity' => 'required|integer'
+                ]
+            );
+            $data['image'] = $fileName;
+            $data['description'] = $request->description;
+            Product::create($data);
+            return response()->json(['message' => 'Product Added'],200);
+        
+
+    }
+    public function editProduct(Request $request)
+    {
+        if($request->img !=null){
+            $exploded = explode(",",$request->img);
+            $decoded = base64_decode($exploded[1]);
+            if(str_contains($exploded[0],'jpeg')){
+                $extension = 'jpg';
+            }else{
+                $extension = 'png';
+            }
+                $fileName = Str::random(40).'.'.$extension;
+                $path = public_path().'/uploads/'.$fileName;
+                file_put_contents($path,$decoded);
+            }
+            else{
+                $fileName=null;
+            }
+            $product = Product::where('id',$request->id)->first();
+            $product->product = $request->product;
+            $product->price = $request->price;
+            $product->quantity = $request->quantity;
+            $product->description = $request->description;
+            $product->image = $fileName;
+            $product->save();
+            return response()->json(['message' => 'Product Edited'],200);
     }
     public function getProducts(){
         $products = Product::orderBy('created_at','DESC')->get();
         return $products;
     }
+
     public function viewProduct($id){
-        return $id;
+        return response()->json(["output" => $id]);
     }
+
     public function deleteProduct($id){
         $product = Product::where('id',$id);
         $product->delete();

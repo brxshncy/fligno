@@ -55,6 +55,14 @@ class UsersTableSeeder extends Seeder
                 'address' => 'CDO',
                 'contact' => '12356'
             ],
+            [
+                'name' => 'Super Admin',
+                'email' => 'admin@admin.com',
+                'password' => Hash::make('admin'),
+                'role' => 'admin',
+                'address' => 'Eternal',
+                'contact' => '99999'
+            ],
         ]);
     }
 }

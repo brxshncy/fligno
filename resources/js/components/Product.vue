@@ -30,6 +30,9 @@ export default {
         }
     },
     created(){
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
+        axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+        axios.defaults.headers.post['Accept'] = 'application/json';
         this.loggedIn();
         this.getProduct();
     },
@@ -39,13 +42,13 @@ export default {
                 this.$emit('loggedIn',{token:this.token,user_role:this.user_role});
             }
         },
-        getProduct(){
+          getProduct() {
             axios.get(`/view-product/${this.productId}`)
             .then(res => {
-                console.log(res.data);
-                this.product = res.data
+                console.log({result: res.data})
             })
-            .catch((err) => console.log(err));
+            .catch(err => console.log(err));
+           
         }
     }
 }

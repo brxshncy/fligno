@@ -20,8 +20,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login','App\Http\Controllers\API\AuthController@login');
 Route::post('register','App\Http\Controllers\API\AuthController@register');
-Route::post('add-product','App\Http\Controllers\API\ProductController@addProduct');
-Route::get('get-product','App\Http\Controllers\API\ProductController@getProducts');
-Route::get('view-product/{id}','App\Http\Controllers\API\ProductController@viewProduct');
-Route::delete('delete-product/{id}','App\Http\Controllers\API\ProductController@deleteProduct');
+
+// PRODUCT
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('add-product','App\Http\Controllers\API\ProductController@addProduct');
+    Route::put('edit-product','App\Http\Controllers\API\ProductController@editProduct');
+    Route::get('get-product','App\Http\Controllers\API\ProductController@getProducts');
+    Route::delete('delete-product/{id}','App\Http\Controllers\API\ProductController@deleteProduct');
+    Route::get('view-product/{id}','App\Http\Controllers\API\ProductController@viewProduct');
+    Route::get('unreadnotification','App\Http\Controllers\API\NotificationController@notification');
+    Route::get('unreadnotification/{user_id}','App\Http\Controllers\API\NotificationController@notifList');
+    Route::get('sales','App\Http\Controllers\API\SalesController@sales');
+});
+
+Route::get('products','App\Http\Controllers\LandingPageController@index');
+Route::get('item/{id}','App\Http\Controllers\API\CheckoutController@item');
+Route::get('user/{id}','App\Http\Controllers\API\CheckoutController@user');
+
+// Route::post('get-product/{category}','App\Http\Controllers\API\GetProductByCategoryController');
+// Route::post('get-product','App\Http\Controllers\API\GetProductByCategoryController@index');
+//Route::get('get-product','App\Http\Controllers\API\ProductController@getProducts');
+
 Route::post('logout','App\Http\Controllers\API\AuthController@logout');

@@ -66,8 +66,11 @@ export default {
                    this.errDiv = true;
                }
                else{
+                    this.$emit('loggedIn');     
+                    console.log(res.data)      
                     const accessToken = res.data.access_token;
                     this.token = accessToken;
+                    localStorage.setItem('user_id',res.data.user_id);
                     localStorage.setItem('access_token',accessToken);
                     if(res.data.user_role == 'admin'){
                             localStorage.setItem('user_role',res.data.user_role);
@@ -75,8 +78,9 @@ export default {
                             this.$router.push('/dashboard');
                     }
                     else if(res.data.user_role == 'customer'){
+                            localStorage.setItem('user_role',res.data.user_role);
                             this.errDiv=false;
-                            this.$router.push('/shop');
+                            this.$router.push('/home');
                     }
                }
               

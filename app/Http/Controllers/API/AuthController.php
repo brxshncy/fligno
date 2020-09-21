@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
 use DB;
+use Auth;
 class AuthController extends Controller
 {
     public function login(Request $request){
@@ -22,7 +23,7 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Invalid Admin Credentials']);
             }
             $accessToken = auth()->user()->createToken('authToken')->accessToken;
-            return response()->json(['user' => auth()->user(),'access_token' => $accessToken,'user_role' => 'admin']);
+            return response()->json(['user' => auth()->user(),'access_token' => $accessToken,'user_role' => 'admin','user_id' => auth()->user()->id]);
         }
         else{
             $credentials = $validated = $request->validate([
@@ -33,7 +34,7 @@ class AuthController extends Controller
                         return response()->json(['error' => 'Invalid credentials']);
                 }
                 $accessToken = auth()->user()->createToken('authToken')->accessToken;
-                return response()->json(['user' => auth()->user(),'access_token' => $accessToken,'user_role' => 'customer']);
+                return response()->json(['user' => auth()->user(),'access_token' => $accessToken,'user_role' => 'customer','user_id' => auth()->user()->id]);
         }
     }
     public function register(Request $request){
@@ -70,10 +71,6 @@ class AuthController extends Controller
        }
     }
     public function logout(Request $request){
-        $token =  DB::table('oauth_access_tokens as token')
-                ->leftJoin('users as u','u.id','=','token.user_id')
-                ->where('token.id',$request->token);
-
-        $token->delete();
+           return auth()->user();
     }
 }

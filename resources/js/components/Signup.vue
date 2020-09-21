@@ -41,7 +41,7 @@
                                   <div class="col">
                                     <div class="form-group">
                                         <label for="">Password</label>
-                                        <input type="text" v-model="password" class="form-control" required>
+                                        <input type="password" v-model="password" class="form-control" required>
                                     </div>
                                 </div>
                             </div>

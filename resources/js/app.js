@@ -8,6 +8,10 @@ Vue.component('landing-page',require('./components/Landing.vue').default);
 
 const routes = [
     {
+        path:'/home',
+        component:require('./components/Home.vue').default
+    },
+    {
         path:'/signup', 
         component:require('./components/Signup.vue').default
     },
@@ -34,6 +38,38 @@ const routes = [
                return next();
             
             
+        }
+    },
+    {
+        path:'/checkout/:productId',
+        name:'checkout',
+        component:require('./components/Checkout.vue').default,
+        beforeEnter(to,from,next){
+            let user_role = window.localStorage.getItem('user_role');
+            let token = window.localStorage.getItem('access_token');
+            if(!token){
+                return next('/login');
+            }
+            if(user_role == 'customer'){
+                return next();
+            }
+               return next();
+        }
+    },
+    {
+        path:'/sales',
+        name:'sales',
+        component:require('./components/Sales.vue').default,
+        beforeEnter(to,from,next){
+            let user_role = window.localStorage.getItem('user_role');
+            let token = window.localStorage.getItem('access_token');
+            if(!token){
+                return next('/login');
+            }
+            if(user_role == 'admin'){
+                return next();
+            }
+               return next();
         }
     },
     {
